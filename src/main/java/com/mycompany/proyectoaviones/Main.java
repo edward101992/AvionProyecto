@@ -16,8 +16,10 @@ public class Main {
      */
     public static void main(String[] args) {
         Inicio ini = new Inicio();
+        ini.insertarcli();
         ini.insertarAvion();
         ini.menuInicio();
+      
         // TODO code application logic here
     }
     

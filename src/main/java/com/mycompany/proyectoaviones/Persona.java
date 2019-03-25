@@ -21,10 +21,10 @@ import java.util.Objects;
 public class Persona implements Serializable{
 
         
-    private int identificacion;
-    private String nombre;
-    private String apellido;
-    private Date fechaNac;
+    public int identificacion;
+    public String nombre;
+    public String apellido;
+    public Date fechaNac;
     public HashMap<Integer,Reserva> reserva;
     
     public Persona(){
