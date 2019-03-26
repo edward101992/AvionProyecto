@@ -262,12 +262,24 @@ public class Inicio {
         
          public void verReserva (int cod){
             int avip=0;
+            Date fechaNac;
+            int edad;
+            
              if(persona.containsKey(cod)){
                 if(persona.get(cod).reserva.isEmpty()){
                     System.out.println("La persona no tiene Reservas");
                 }else {
                 int i = 1;
-                System.out.println("Reporte de la Persona:  " + persona.get(cod).getNombre()+ " " + persona.get(cod).getApellido()+" " + persona.get(cod).getFechaNac());
+                fechaNac = persona.get(cod).fechaNac;
+                Calendar fechaNac_ = Calendar.getInstance();
+                fechaNac_.setTime(fechaNac);
+                try {
+                    edad = Math.abs(Calendar.getInstance().get(Calendar.YEAR) - fechaNac_.get(Calendar.YEAR));
+                } catch (ArithmeticException e) {
+                    edad = -1;
+                }
+
+                System.out.println("Reporte de la Persona:  " + persona.get(cod).getNombre()+ " " + persona.get(cod).getApellido()+" - Edad: " + edad);
                 
                 int rep =  persona.get(cod).reserva.size();
                 for(Reserva report : persona.get(cod).getReserva().values()){
