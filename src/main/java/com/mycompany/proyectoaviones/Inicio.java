@@ -5,28 +5,13 @@
  */
 package com.mycompany.proyectoaviones;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Collections;
 import java.io.InputStreamReader;
-import java.util.Set;
-import java.util.Iterator;
 import java.util.HashMap;
-import java.io.FileOutputStream;
-import java.text.DateFormat;
-import java. util. Date;
-import java.text.SimpleDateFormat;
-import java.text.SimpleDateFormat;  
 import java.util.Calendar;
 import java.util.Date;  
-import java.util.Scanner;
 /**
  *
- * @author SuperUs
+ * @author Edward Ramos
  */
 public class Inicio {
     
@@ -39,6 +24,11 @@ public class Inicio {
            persona = new HashMap();   
        }
        
+       /**
+        * Metodo MenuInicio es donde inica la aplicacion
+        */
+       
+       
        public void menuInicio(){
            try{
               String opc="";
@@ -47,8 +37,7 @@ public class Inicio {
            System.out.println("1. Insertar Cliente");
            System.out.println("2. Reservar");
            System.out.println("3. Buscar Cliente");
-  //       System.out.println("4. Buscar Asiento");
-           System.out.println("5. Despegar Avion");
+           System.out.println("4. Ver Vendidos");
            System.out.println("6. Salir");
            opc = datos.readLine();
            
@@ -60,7 +49,7 @@ public class Inicio {
                String nombre = datos.readLine();
                System.out.println("Digite Apellido");
                String apellido = datos.readLine();
-               System.out.println("Fecha Nacimiento");
+               System.out.println("Fecha Nacimiento (dia/mes/año)");
                String fechanac = datos.readLine();
                String message = agregaCliente(codigoCliente,nombre,apellido,fechanac);
                System.out.println(message);
@@ -76,27 +65,8 @@ public class Inicio {
                System.out.println("Digite Codigo del cliente");
                codigoCliente = Integer.parseInt(datos.readLine());
                verReserva(codigoCliente);             
-           }else if(opc.equals("4")){
-               String opcAvi="";
-               int numeroAsiento;
-               System.out.println("*********Buscar Asiento*****");
-               System.out.println("Digite el Avion");
-               opcAvi = datos.readLine();
-              if(opcAvi.equals("1")){
-                  System.out.println("Avion numero 1");
-                  System.out.println("Digite el Asiento");
-                  numeroAsiento=Integer.parseInt(datos.readLine());
-              }else if(opcAvi.equals("2")){
-                  System.out.println("Avion numero 2");
-                  System.out.println("Digite el Asiento");
-                  numeroAsiento=Integer.parseInt(datos.readLine());
-              }else if(opcAvi.equals("3")){
-                  System.out.println("Avion numero 3");
-                  System.out.println("Digite el Asiento");
-                  numeroAsiento=Integer.parseInt(datos.readLine());
-              }
-           }else if(opc.equals("5")){             
-               System.out.println("Digite Avion que desdegara");
+           }else if(opc.equals("4")){             
+               System.out.println("Digite Avion que Desea ver Boletos Vendidos");
                int opcavi = Integer.parseInt(datos.readLine());
                  if(opcavi >=4){
                    System.out.println("Avion NO Valido");
@@ -114,7 +84,9 @@ public class Inicio {
            
            
        }
-   
+   /**
+    * Metodo insertar avion el cual inserta en el mapa Avion (avi)
+    */
        public void insertarAvion(){
             avi = new HashMap<>();
             //Avion 1
@@ -162,80 +134,45 @@ public class Inicio {
             avi.put(36,new Avion(36,3,12,15000));
            
        }
-     
-       public void insertarcli(){
+     /**
+      * Metodo insertarClienteQ insertar a usuarios desde el inicio de la aplicacion
+      */
+       public void insertarClienteQ(){
            persona.put(1,new Persona(1,"Edward","Ramos","10/07/1992"));
            persona.put(2,new Persona(2,"Arturo","Baez","18/07/2002"));
            persona.put(3,new Persona(3,"Juan","Perez","19/07/2010"));
 
        }
-       
-        public void agregarReservaNosirve(int cod){
-        try{
-            
-                int llaveAvion;
-                if(persona.containsKey(cod)){
-                    
-              
-                    int tamanio = persona.get(cod).getReserva().size();
-                    int pu = 0;
-                    
-                    System.out.println("Avion:");
-                    int avion = Integer.parseInt(datos.readLine());
-                    System.out.println("Asiento:");
-                    int asiento = Integer.parseInt(datos.readLine());
-                  //System.out.println(avi.size());
-                   int puestoAvi=0;
-
-                    for (HashMap.Entry<Integer,Avion> entry : avi.entrySet()){        
-                         if(entry.getValue().codAvion== avion  && entry.getValue().puesto== asiento){
-                           puestoAvi= entry.getValue().llave;
-                    }    
-                    }                  
-                    if(persona.get(cod).getReserva().isEmpty()){
-                         Reserva rep = new Reserva(cod,puestoAvi);                   
-                         persona.get(cod).getReserva().put(cod, new Reserva(cod,puestoAvi));
-                         
-                    }else{
-                       Reserva rep = new Reserva(cod,(puestoAvi+tamanio));                   
-                       persona.get(cod).getReserva().put(cod, new Reserva(cod,(puestoAvi+tamanio)));
-                    }
-                    
-                    Reserva rep = new Reserva(cod,puestoAvi);                   
-                    persona.get(cod).getReserva().put(cod, new Reserva(cod,puestoAvi));
-                    }else {
-                    System.out.println("El usuario no existe");
-                }
-        }catch(Exception Ex){
-            System.out.println(Ex.getMessage());
-            System.out.println("Aqui ocurrio un Error en la Linea 236");
-        }       
-    }
-        
-        
+       /**
+        * Metodo agregarReserva el cual agrega una reserva al cliente
+        * @param cod esta variable es el codigo del pasajero
+        */
         public void agregarReserva(int cod){
            try{ 
+                     int puestoAvi=0;
+                     int codper =0;
+                     int key=0;
                if(persona.containsKey(cod)){
                      System.out.println("Avion:");
                      int avion = Integer.parseInt(datos.readLine());
                      System.out.println("Asiento:");
                      int asiento = Integer.parseInt(datos.readLine());
-                     int puestoAvi=0;
-                     int codper =0;
-                     int key=0;
-                     for (HashMap.Entry<Integer,Persona> entry : persona.entrySet()){        
+                     if(asiento>=12||avion>=4){
+                         System.out.println("Error al analizar los datos");
+                     }else{
+                         for (HashMap.Entry<Integer,Persona> entry : persona.entrySet()){        
                          codper = entry.getValue().identificacion;
                          key = persona.get(codper).getReserva().size()+key; 
                          }
-                    key = key +1; 
-                    
-                     for (HashMap.Entry<Integer,Avion> entry : avi.entrySet()){        
-                         if(entry.getValue().codAvion== avion  && entry.getValue().puesto== asiento){
-                           puestoAvi= entry.getValue().llave;
-                         }  
-                    }
-                    persona.get(cod).getReserva().put(key, new Reserva(key,puestoAvi));
-                    
+                         key = key +1; 
+                         
+                         for (HashMap.Entry<Integer,Avion> entry : avi.entrySet()){        
+                            if(entry.getValue().codAvion== avion  && entry.getValue().puesto== asiento){
+                               puestoAvi= entry.getValue().llave;
+                            }  
+                         }
+                      persona.get(cod).getReserva().put(key, new Reserva(key,puestoAvi)); 
+                     }                
                      }else{
                      System.out.println("El usuario no existe");
                      }
@@ -243,18 +180,21 @@ public class Inicio {
                System.out.println(Ex.getMessage());
            }
         }
-
-        
-        
+       /**
+        * Metodo agregaCliente es el que agrega un cliente al mapa Persona
+        * @param cod llave del cliente
+        * @param nom nombre del cliente (String)
+        * @param ape apellido del cliente (String)
+        * @param fech fecha de nacimiento del cliente (String)
+        * @return 
+        */
     public String agregaCliente(int cod, String nom, String ape,String fech){
           Persona per = new Persona(cod,nom,ape,fech);
           String Message = "";
           if(persona.containsKey(cod)){
-              //System.out.println("El cliente ya esta en la Base de Datos");
               Message = "El cliente ya esta en la Base de Datos";
           }else{
               persona.put(cod, per);
-              //System.out.println("Cliente Insertado");
               Message = "Cliente Insertado";
           }
           return Message;
@@ -278,16 +218,12 @@ public class Inicio {
                 } catch (ArithmeticException e) {
                     edad = -1;
                 }
-
-                System.out.println("Reporte de la Persona:  " + persona.get(cod).getNombre()+ " " + persona.get(cod).getApellido()+" - Edad: " + edad);
-                
+                System.out.println("Reporte de la Persona:  " + persona.get(cod).getNombre()+ " " + persona.get(cod).getApellido()+" - Edad: " + edad);               
                 int rep =  persona.get(cod).reserva.size();
                 for(Reserva report : persona.get(cod).getReserva().values()){
-                    //    System.out.println("Boleto :" + i);
+                        System.out.println("Boleto :" + i);
                         System.out.println("___________________________");
-                       // System.out.println("Codigo de Venta :" + persona.get(cod).getReserva().keySet());
                         System.out.println("Codigo de Venta :" + report.getCodigoVenta());
-                        //System.out.println("Asiento :" + report.getAsiento()); 
                         avip = report.getAsiento();
                         if(avip<=12){
                             System.out.println("Avion : 1");
@@ -310,98 +246,49 @@ public class Inicio {
                 System.out.println("La persona no esta registrada");
             }
          }
-        
-         public void despegarAvion(int avion){
-                    
-             try{
-             int avip=0;
+        /**
+         * Metodo el cual despega el avion y arroja el total de los pasajes del avion
+         * @param avion esta variable es el avion que queremos despegar (1-2-3)
+         */
+         public void despegarAvion(int avion){                
+                     int avip=0;
                      int codper =0;
+                     int key=0;
                      int totalVendido = 0;
                      for (HashMap.Entry<Integer,Persona> entry : persona.entrySet()){        
                          codper = entry.getValue().identificacion;
                          for(Reserva report : persona.get(codper).getReserva().values()){
-                             avip = report.getAsiento();                            
+                             avip = report.getAsiento();
                              for (HashMap.Entry<Integer,Avion> entryav : avi.entrySet()) {
                                 if(entryav.getValue().llave ==  avip ){
                                     if(entryav.getValue().codAvion == avion)
                                     {
-                                  //      System.out.println("Avion :" + entryav.getValue().codAvion);
-                                  //      System.out.println("Asiento :" + entryav.getValue().puesto);
+                                        System.out.println("Avion :" + entryav.getValue().codAvion);
+                                        System.out.println("Asiento :" + entryav.getValue().puesto);
                                         System.out.println("Precio :" + entryav.getValue().precio);
-                                        totalVendido = entryav.getValue().precio + totalVendido; 
-                                        System.out.println("CodVenta: " + report.getCodigoVenta());
-                                        System.out.println("CodPer: " + codper);
-                                        System.out.println("Total de vendido SUBTOTAL : " + totalVendido);
-                                        persona.get(codper).getReserva().remove(report.getCodigoVenta());
+                                        totalVendido = entryav.getValue().precio + totalVendido;
+                                 //       persona.get(codper).getReserva().remove(report.getCodigoVenta());
                                     }    
                                 }
                             }
-                         } 
-                     }
+                         }
+
+                         }
                      System.out.println("Total de vendido : " + totalVendido);
-             }catch(Exception Ex){
-                 System.out.println(Ex.getMessage());
+                
              }
                      
-         }
-         
-         public void despegarAvionNosirve(int avion){
-              try{
-              if(avi.containsKey(avion)){
-                  if(avi.get(avion).reserva.isEmpty()){
-                      System.out.println("El avion no tiene ninguna reserva, no puede despegar");
-                  }else{
-                      int codAvion;
-                      System.out.println("Digite el numero del Avion");
-                      codAvion = Integer.parseInt(datos.readLine());
-                        if(codAvion==1){
-                                for(Reserva report : avi.get(avion).getReserva().values()){  
-                                     if(report.getCodigoVenta()== codAvion){
-                                        for(int i = 1;i<=12;i++){
-                                        persona.get(avion).getReserva().remove(i);
-                                        
-                               }                              
-                             }
-                           }
-                         System.out.println("Avion Despego Satisfactoriamente");    
-                        }else if(codAvion==2){
-                            for(Reserva report : avi.get(avion).getReserva().values()){  
-                                     if(report.getCodigoVenta()== codAvion){
-                                        for(int i = 13;i<=24;i++){
-                                        persona.get(avion).getReserva().remove(i);
-                                        
-                               }                              
-                             }
-                           }
-                         System.out.println("Avion Despego Satisfactoriamente");  
-                        }else if(codAvion==3){
-                            for(Reserva report : avi.get(avion).getReserva().values()){  
-                                     if(report.getCodigoVenta()== codAvion){
-                                        for(int i = 25;i<=36;i++){
-                                        persona.get(avion).getReserva().remove(i);                                      
-                               }                              
-                             }
-                           }
-                         System.out.println("Avion Despego Satisfactoriamente");  
-                        }
-                                              
-                      }
-              }             
-          }catch(Exception ex){
-                System.out.println(ex.getMessage());
-                
-          }             
-       }
-       
+     /**
+      * Metodo pintarAvion el cual pinta los 3 aviones y sus asientos Vacios(X) o ocupados (O)
+      * 
+      */     
          public void pintarAvion(){
                      int avip=0;
                      int codper =0;
-                     int totalVendido = 0;
                      String[] A = new String [37];
                      for(int i=0; i<=36; i++){
                          A[i] = "X";
-                     }
-                         
+                     }                  
                      for (HashMap.Entry<Integer,Persona> entry : persona.entrySet()){        
                          codper = entry.getValue().identificacion;
                          for(Reserva report : persona.get(codper).getReserva().values()){
@@ -449,5 +336,4 @@ public class Inicio {
          } 
 
    }
-    
-         
+   

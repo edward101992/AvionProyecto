@@ -16,7 +16,7 @@ public class Main {
      */
     public static void main(String[] args) {
         Inicio ini = new Inicio();
-        ini.insertarcli();
+        ini.insertarClienteQ();
         ini.insertarAvion();
         ini.menuInicio();
       
