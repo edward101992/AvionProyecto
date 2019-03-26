@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Reserva {
    
     
-    private int codigoVenta;
+    public int codigoVenta;
     private int asiento;
    
 

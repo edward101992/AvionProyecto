@@ -62,27 +62,13 @@ public class Inicio {
                String apellido = datos.readLine();
                System.out.println("Fecha Nacimiento");
                String fechanac = datos.readLine();
-               agregaCliente(codigoCliente,nombre,apellido,fechanac);
+               String message = agregaCliente(codigoCliente,nombre,apellido,fechanac);
+               System.out.println(message);
            }else if (opc.equals("2")){
-               pintarAvion();
+               pintarAvion();               
                int codigoCliente;
                codigoCliente = Integer.parseInt(datos.readLine());
-               agregaReservaPrueva(codigoCliente);
-              
- //              String opcavio="";
- //              System.out.println("Digite el Avion: ");
- //              opcavio= datos.readLine();
- //              int asiento;               
- //              if(opcavio.equals("1")){                   
- //                  System.out.println("Digite el numero de asiento");
- //                  asiento = Integer.parseInt(datos.readLine());
- //              }else if(opcavio.equals("2")){
- //                  System.out.println("Digite el numero de asiento");
- //                  asiento = Integer.parseInt(datos.readLine());
- //              }else if(opcavio.equals("3")){
- //                  System.out.println("Digite el numero de asiento");
- //                  asiento = Integer.parseInt(datos.readLine());
- //              }
+               agregarReserva(codigoCliente);
                
            }else if(opc.equals("3")){
                System.out.println("*********Buscar Cliente*******");
@@ -115,7 +101,7 @@ public class Inicio {
                  if(opcavi >=4){
                    System.out.println("Avion NO Valido");
                  }else{
-                     despegarPrueba(opcavi);
+                     despegarAvion(opcavi);
                  }
               
            }
@@ -128,44 +114,7 @@ public class Inicio {
            
            
        }
-       
-       public void pintarAvion(){
-            System.out.println("********RESERVAR***********"); 
-               System.out.println("");               
-               System.out.println("*********************************");
-               System.out.println("*********Avion Numero 1 MIXTO **********");
-               System.out.println("VIP = 50.000 - COMERCIAL = 20.000");
-               System.out.println("");
-               System.out.println("1 - 3" + " X X X Clase VIP");
-               System.out.println("4 - 6" + " X X X Clase VIP");
-               System.out.println("7 - 9" + " X X X Clase COMERCIAL");
-               System.out.println("10-12" + " X X X Clase COMERCIAL");
-               System.out.println("");
-               System.out.println("*********************************");
-               System.out.println("");
-               System.out.println("*********Avion Numero 2 EJECUTIVO **********");
-               System.out.println("EJECUTIVO = 30.000");
-               System.out.println("");
-               System.out.println("1 - 3" + " X X X ");
-               System.out.println("4 - 6" + " X X X ");
-               System.out.println("7 - 9" + " X X X ");
-               System.out.println("10-12" + " X X X ");               
-               System.out.println("");
-               System.out.println("*********************************");
-               System.out.println("*********Avion Numero 3 NORMAL **********");
-               System.out.println("NORMAL = 15.000");
-               System.out.println("");
-               System.out.println("1 - 3" + " X X X ");
-               System.out.println("4 - 6" + " X X X ");
-               System.out.println("7 - 9" + " X X X ");
-               System.out.println("10-12" + " X X X ");
-               System.out.println("");
-               System.out.println("*********************************");
-               System.out.println("Digite codigo cliente");
-
-       }
-       
-       
+   
        public void insertarAvion(){
             avi = new HashMap<>();
             //Avion 1
@@ -221,7 +170,7 @@ public class Inicio {
 
        }
        
-        public void agregarReserva(int cod){
+        public void agregarReservaNosirve(int cod){
         try{
             
                 int llaveAvion;
@@ -254,7 +203,6 @@ public class Inicio {
                     
                     Reserva rep = new Reserva(cod,puestoAvi);                   
                     persona.get(cod).getReserva().put(cod, new Reserva(cod,puestoAvi));
-                    System.out.println("hhhhh" + persona.get(cod).getReserva().size());
                     }else {
                     System.out.println("El usuario no existe");
                 }
@@ -265,8 +213,9 @@ public class Inicio {
     }
         
         
-        public void agregaReservaPrueva(int cod){
-           try{
+        public void agregarReserva(int cod){
+           try{ 
+               if(persona.containsKey(cod)){
                      System.out.println("Avion:");
                      int avion = Integer.parseInt(datos.readLine());
                      System.out.println("Asiento:");
@@ -276,7 +225,6 @@ public class Inicio {
                      int key=0;
                      for (HashMap.Entry<Integer,Persona> entry : persona.entrySet()){        
                          codper = entry.getValue().identificacion;
-                         System.out.println(codper + " = " + persona.get(codper).getReserva().size());
                          key = persona.get(codper).getReserva().size()+key; 
                          }
                     key = key +1; 
@@ -288,21 +236,28 @@ public class Inicio {
                     }
                     persona.get(cod).getReserva().put(key, new Reserva(key,puestoAvi));
                     
-                     }catch(Exception Ex){
+                     }else{
+                     System.out.println("El usuario no existe");
+                     }
+           }catch(Exception Ex){
                System.out.println(Ex.getMessage());
            }
         }
 
         
         
-    public void agregaCliente(int cod, String nom, String ape,String fech){
+    public String agregaCliente(int cod, String nom, String ape,String fech){
           Persona per = new Persona(cod,nom,ape,fech);
+          String Message = "";
           if(persona.containsKey(cod)){
-              System.out.println("El cliente ya esta en la Base de Datos");
+              //System.out.println("El cliente ya esta en la Base de Datos");
+              Message = "El cliente ya esta en la Base de Datos";
           }else{
               persona.put(cod, per);
-              System.out.println("jkjkjkj   " + persona.size());
+              //System.out.println("Cliente Insertado");
+              Message = "Cliente Insertado";
           }
+          return Message;
       }
         
          public void verReserva (int cod){
@@ -315,10 +270,10 @@ public class Inicio {
                 System.out.println("Reporte de la Persona:  " + persona.get(cod).getNombre()+ " " + persona.get(cod).getApellido()+" " + persona.get(cod).getFechaNac());
                 
                 int rep =  persona.get(cod).reserva.size();
-                    System.out.println("hhhhh" + rep);
                 for(Reserva report : persona.get(cod).getReserva().values()){
                     //    System.out.println("Boleto :" + i);
                         System.out.println("___________________________");
+                       // System.out.println("Codigo de Venta :" + persona.get(cod).getReserva().keySet());
                         System.out.println("Codigo de Venta :" + report.getCodigoVenta());
                         //System.out.println("Asiento :" + report.getAsiento()); 
                         avip = report.getAsiento();
@@ -344,34 +299,41 @@ public class Inicio {
             }
          }
         
-         public void despegarPrueba(int avion){
-                     int avip=0;
+         public void despegarAvion(int avion){
+                    
+             try{
+             int avip=0;
                      int codper =0;
-                     int key=0;
                      int totalVendido = 0;
                      for (HashMap.Entry<Integer,Persona> entry : persona.entrySet()){        
                          codper = entry.getValue().identificacion;
                          for(Reserva report : persona.get(codper).getReserva().values()){
-                             avip = report.getAsiento();
+                             avip = report.getAsiento();                            
                              for (HashMap.Entry<Integer,Avion> entryav : avi.entrySet()) {
                                 if(entryav.getValue().llave ==  avip ){
                                     if(entryav.getValue().codAvion == avion)
                                     {
-                                        System.out.println("Avion :" + entryav.getValue().codAvion);
-                                        System.out.println("Asiento :" + entryav.getValue().puesto);
+                                  //      System.out.println("Avion :" + entryav.getValue().codAvion);
+                                  //      System.out.println("Asiento :" + entryav.getValue().puesto);
                                         System.out.println("Precio :" + entryav.getValue().precio);
-                                        totalVendido = entryav.getValue().precio + totalVendido;                                      
+                                        totalVendido = entryav.getValue().precio + totalVendido; 
+                                        System.out.println("CodVenta: " + report.getCodigoVenta());
+                                        System.out.println("CodPer: " + codper);
+                                        System.out.println("Total de vendido SUBTOTAL : " + totalVendido);
+                                        persona.get(codper).getReserva().remove(report.getCodigoVenta());
                                     }    
                                 }
                             }
-                         }
-                         
-                         }
+                         } 
+                     }
                      System.out.println("Total de vendido : " + totalVendido);
+             }catch(Exception Ex){
+                 System.out.println(Ex.getMessage());
+             }
                      
          }
          
-         public void despegarAvion(int avion){
+         public void despegarAvionNosirve(int avion){
               try{
               if(avi.containsKey(avion)){
                   if(avi.get(avion).reserva.isEmpty()){
@@ -418,5 +380,62 @@ public class Inicio {
                 
           }             
        }
-    }
+       
+         public void pintarAvion(){
+                     int avip=0;
+                     int codper =0;
+                     int totalVendido = 0;
+                     String[] A = new String [37];
+                     for(int i=0; i<=36; i++){
+                         A[i] = "X";
+                     }
+                         
+                     for (HashMap.Entry<Integer,Persona> entry : persona.entrySet()){        
+                         codper = entry.getValue().identificacion;
+                         for(Reserva report : persona.get(codper).getReserva().values()){
+                             avip = report.getAsiento();                            
+                             for (HashMap.Entry<Integer,Avion> entryav : avi.entrySet()) {
+                                if(entryav.getValue().llave ==  avip ){
+                                    A[avip] = "O";                                
+                                }
+                              }
+                            }  
+                      }
+               System.out.println("********RESERVAR***********"); 
+               System.out.println("");               
+               System.out.println("*********************************");
+               System.out.println("*********Avion Numero 1 MIXTO **********");
+               System.out.println("VIP = 50.000 - COMERCIAL = 20.000");
+               System.out.println("");
+               System.out.println("1 - 3" + " " + A[1] + " " + A[2] + " " + A[3] + " Clase VIP");
+               System.out.println("4 - 6" + " " + A[4] + " " + A[5] + " " + A[6] + " Clase VIP");
+               System.out.println("7 - 9" + " " + A[7] + " " + A[8] + " " + A[9] + " Clase COMERCIAL");
+               System.out.println("10-12" + " " + A[10] + " " + A[11] + " " + A[12] + " Clase COMERCIAL");
+               System.out.println("");
+               System.out.println("*********************************");
+               System.out.println("");
+               System.out.println("*********Avion Numero 2 EJECUTIVO **********");
+               System.out.println("EJECUTIVO = 30.000");
+               System.out.println("");
+               System.out.println("1 - 3" + " " + A[13] + " " + A[14] + " " + A[15]);
+               System.out.println("4 - 6" + " " + A[16] + " " + A[17] + " " + A[18]);
+               System.out.println("7 - 9" + " " + A[19] + " " + A[20] + " " + A[21]);
+               System.out.println("10-12" + " " + A[22] + " " + A[23] + " " + A[24]);               
+               System.out.println("");
+               System.out.println("*********************************");
+               System.out.println("*********Avion Numero 3 NORMAL **********");
+               System.out.println("NORMAL = 15.000");
+               System.out.println("");
+               System.out.println("1 - 3" + " " + A[25] + " " + A[26] + " " + A[27]);
+               System.out.println("4 - 6" + " " + A[28] + " " + A[29] + " " + A[30]);
+               System.out.println("7 - 9" + " " + A[31] + " " + A[32] + " " + A[33]);
+               System.out.println("10-12" + " " + A[34] + " " + A[35] + " " + A[36]);
+               System.out.println("");
+               System.out.println("*********************************");
+               System.out.println("Digite codigo cliente");
+           
+         } 
+
+   }
+    
          
